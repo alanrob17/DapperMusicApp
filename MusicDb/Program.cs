@@ -1,0 +1,73 @@
+﻿using System.Data;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using MusicDb.Data;
+using MusicDb.Repositories;
+using MusicDb.Services;
+using MusicDb.Services.Output;
+using Serilog;
+
+namespace MusicDb
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            // Configure Serilog early to capture startup logs
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Async(a => a.Console())
+                .CreateLogger();
+
+            try
+            {
+                Log.Information("Starting MusicDb application...");
+
+                var host = Host.CreateDefaultBuilder(args)
+                    .ConfigureAppConfiguration((hostingContext, config) =>
+                    {
+                        config.SetBasePath(Directory.GetCurrentDirectory());
+                        config.AddJsonFile("appsettings.json", optional: false);
+
+                        // Optional: Add environment-specific config
+                        var env = hostingContext.HostingEnvironment;
+                        config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                    })
+                    .ConfigureServices((context, services) =>
+                    {
+                        // Add configuration to DI container
+                        services.AddSingleton<IConfiguration>(context.Configuration);
+                        services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
+                        services.AddScoped<IDbConnection>(sp =>
+                            sp.GetRequiredService<IDbConnectionFactory>().CreateConnection());
+
+                        services.AddScoped<IDataAccess, DataAccess>();
+
+                        services.AddScoped<IArtistRepository, ArtistRepository>();
+
+                        services.AddScoped<ArtistDbService>();
+
+                        services.AddSingleton<IOutputService, ConsoleOutputService>();
+                    })
+                    .UseSerilog() // This will use the logger we configured above
+                    .Build();
+
+                await host.Services.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
+
+                Log.Information("All database operations completed successfully");
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Application terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+    }
+}
