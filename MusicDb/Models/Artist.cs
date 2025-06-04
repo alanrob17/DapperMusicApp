@@ -22,22 +22,31 @@ namespace MusicDb.Models
         [MaxLength(100)]
         public string? Name { get; set; }
 
-        [MaxLength(int.MaxValue), Column(TypeName = "text")]
+        [Column(TypeName = "text")]
         public string? Biography { get; set; }
 
+        [Required]
         [MaxLength(400)]
-        public string Folder { get; set; }
+        public string Folder { get; set; } = string.Empty;
 
         public int RecordArtistId { get; set; }
 
-        [InverseProperty(nameof(Record.Artist))]
-        public virtual ICollection<Record> Records { get; set; }
+        // Navigation property
+        public virtual ICollection<Record> Records { get; set; } = new HashSet<Record>();
+
+        // Computed property for display name
+        public string DisplayName =>
+            !string.IsNullOrWhiteSpace(Name) ? Name : $"{FirstName} {LastName}".Trim();
 
         public override string ToString()
         {
-            var biography = string.IsNullOrEmpty(Biography) ? "No Biography" : (Biography.Length > 30 ? Biography.Substring(0, 30) + "..." : Biography);
+            var bioPreview = string.IsNullOrEmpty(Biography)
+                ? "No Biography"
+                : Biography.Length > 30
+                    ? Biography[..30] + "..."
+                    : Biography;
 
-            return $"Artist Id: {ArtistId}, Artist: {Name}, Biography: {biography}";
+            return $"Artist ID: {ArtistId}, Name: {DisplayName}, Bio Preview: {bioPreview}";
         }
     }
 }

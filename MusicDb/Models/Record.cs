@@ -16,52 +16,63 @@ namespace MusicDb.Models
         [Required]
         public int ArtistId { get; set; }
 
-        [StringLength(80)]
-        public string? Name { get; set; }
+        [Required]
+        [MaxLength(80)]
+        public string Name { get; set; } = string.Empty;
 
-        [StringLength(50)]
+        [MaxLength(50)]
         public string? Field { get; set; }
 
         public int Recorded { get; set; }
 
-        [StringLength(50)]
+        [MaxLength(50)]
         public string? Label { get; set; }
 
-        [StringLength(50)]
+        [MaxLength(50)]
         public string? Pressing { get; set; }
 
-        [StringLength(4)]
+        [MaxLength(4)]
         public string? Rating { get; set; }
+
+        [Range(1, 100)]
         public int Discs { get; set; }
 
-        [StringLength(50)]
-        public string? Media { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Media { get; set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? Bought { get; set; }
 
         [Column(TypeName = "money")]
+        [Range(0, 10000)]
         public decimal? Cost { get; set; }
 
-        [StringLength(50)]
+        [MaxLength(50)]
         public string? CoverName { get; set; }
 
         [Column(TypeName = "text")]
         public string? Review { get; set; }
 
+        [Required]
         [MaxLength(400)]
-        public string Folder { get; set; }
+        public string? Folder { get; set; }
 
-        [StringLength(50)]
-        public string Length { get; set; }
+        [MaxLength(50)]
+        public string? Length { get; set; }
 
+        // Navigation property
         [ForeignKey(nameof(ArtistId))]
-        [InverseProperty("Records")]
         public virtual Artist? Artist { get; set; }
+
+        [InverseProperty(nameof(Disc.Record))]
+        public virtual ICollection<Disc> DiscCollection { get; set; } = new HashSet<Disc>();
+
+        [NotMapped]
+        public IEnumerable<Track>? AllTracks => DiscCollection?.SelectMany(d => d.Tracks);
 
         public override string ToString()
         {
-            return $"Record Id: {RecordId}, Name: {Name}, Recorded: {Recorded}, Media: {Media}";
+            return $"Record ID: {RecordId}, Title: {Name}, Year: {Recorded}, Media: {Media}";
         }
     }
 }

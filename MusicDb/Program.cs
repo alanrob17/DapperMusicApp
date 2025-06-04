@@ -48,15 +48,24 @@ namespace MusicDb
                         services.AddScoped<IDataAccess, DataAccess>();
 
                         services.AddScoped<IArtistRepository, ArtistRepository>();
+                        services.AddScoped<IRecordRepository, RecordRepository>();
+                        services.AddScoped<IDiscRepository, DiscRepository>();
+                        services.AddScoped<ITrackRepository, TrackRepository>();
 
                         services.AddScoped<ArtistDbService>();
+                        services.AddScoped<RecordDbService>();
+                        services.AddScoped<DiscDbService>();
+                        services.AddScoped<TrackDbService>();
 
                         services.AddSingleton<IOutputService, ConsoleOutputService>();
                     })
                     .UseSerilog() // This will use the logger we configured above
                     .Build();
 
-                await host.Services.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
+                // await host.Services.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
+                // await host.Services.GetRequiredService<RecordDbService>().RunAllDatabaseOperations();
+                // await host.Services.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
+                await host.Services.GetRequiredService<TrackDbService>().RunAllDatabaseOperations();
 
                 Log.Information("All database operations completed successfully");
             }
