@@ -21,13 +21,30 @@ namespace MusicDb.Services
 
         public async Task RunAllDatabaseOperations()
         {
-            await GetAllDiscsAsync();
+            // await GetAllDiscsAsync();
+            await GetAllDiscLengthsAsync();
         }
 
         private async Task GetAllDiscsAsync()
         {
-            
             var discs = await _repository.GetAllDiscsAsync();
+            if (discs != null && discs.Any())
+            {
+                await _output.WriteLineAsync("Discs retrieved successfully:");
+                foreach (var disc in discs)
+                {
+                    await _output.WriteLineAsync(disc.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No discs found.");
+            }
+        }
+
+        private async Task GetAllDiscLengthsAsync()
+        {
+            var discs = await _repository.GetAllDiscLengthsAsync();
             if (discs != null && discs.Any())
             {
                 await _output.WriteLineAsync("Discs retrieved successfully:");

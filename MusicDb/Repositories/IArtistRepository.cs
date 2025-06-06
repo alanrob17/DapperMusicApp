@@ -9,11 +9,7 @@ namespace MusicDb.Repositories
 {
     public interface IArtistRepository
     {
-        // Define methods for artist repository operations
-        //void AddArtist(Artist artist);
-        //Artist GetArtistById(int id);
         Task<IEnumerable<Artist>> GetAllArtistsAsync();
-        //void UpdateArtist(Artist artist);
-        //void DeleteArtist(int id);
+        Task<IEnumerable<Artist>> GetAllArtistsWithBriefBioAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MusicDb.Models;
+using MusicDb.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace MusicDb.Repositories
     public interface IDiscRepository
     {
         Task<IEnumerable<Disc>> GetAllDiscsAsync();
+        Task<IEnumerable<ArtistRecordDisc>> GetAllDiscLengthsAsync();
     }
 }

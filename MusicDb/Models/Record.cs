@@ -20,34 +20,18 @@ namespace MusicDb.Models
         [MaxLength(80)]
         public string Name { get; set; } = string.Empty;
 
+        [MaxLength(80)]
+        public string SubTitle { get; set; } = string.Empty;
+
         [MaxLength(50)]
         public string? Field { get; set; }
 
         public int Recorded { get; set; }
 
-        [MaxLength(50)]
-        public string? Label { get; set; }
-
-        [MaxLength(50)]
-        public string? Pressing { get; set; }
-
-        [MaxLength(4)]
-        public string? Rating { get; set; }
-
         [Range(1, 100)]
         public int Discs { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public string Media { get; set; }
-
-        public DateTime? Bought { get; set; }
-
-        [Column(TypeName = "money")]
-        [Range(0, 10000)]
-        public decimal? Cost { get; set; }
-
-        [MaxLength(50)]
+        [MaxLength(400)]
         public string? CoverName { get; set; }
 
         [Column(TypeName = "text")]
@@ -72,7 +56,7 @@ namespace MusicDb.Models
 
         public override string ToString()
         {
-            return $"Record ID: {RecordId}, Title: {Name}, Year: {Recorded}, Media: {Media}";
+            return $"Record ID: {RecordId}, Title: {Name}, Year: {Recorded}, Discs: {Discs}, Length: {Length}";
         }
     }
 }

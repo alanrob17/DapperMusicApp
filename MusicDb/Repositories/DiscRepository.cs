@@ -1,5 +1,6 @@
 ﻿using MusicDb.Data;
 using MusicDb.Models;
+using MusicDb.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,12 @@ namespace MusicDb.Repositories
         {
             var sproc = "up_DiscSelectAll";
             return await _db.GetDataAsync<Disc>(sproc, new { });
+        }
+
+        public async Task<IEnumerable<ArtistRecordDisc>> GetAllDiscLengthsAsync()
+        {
+            var sproc = "up_GetAllDiscLengths";
+            return await _db.GetDataAsync<ArtistRecordDisc>(sproc, new { });
         }
     }
 }

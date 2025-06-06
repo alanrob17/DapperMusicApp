@@ -21,7 +21,10 @@ namespace MusicDb.Services
 
         public async Task RunAllDatabaseOperations()
         {
-            await GetAllArtistsAsync();
+            // await GetAllArtistsAsync();
+            await GetAllArtistsWithBriefBioAsync();
+
+            // TODO: Create these methods.
             // await DisplayAllArtistsAsync();
             // await GetArtistByIdAsync(114);
             // await CountArtistsAsync();
@@ -59,6 +62,15 @@ namespace MusicDb.Services
                 }
 
                 await _output.WriteLineAsync($"Id: {artist.ArtistId}, Name: {artist.Name} - {biography}");
+            }
+        }
+
+        private async Task GetAllArtistsWithBriefBioAsync()
+        {
+            var artists = await _repository.GetAllArtistsWithBriefBioAsync();
+            foreach (var artist in artists)
+            {
+                await _output.WriteLineAsync($"Id: {artist.ArtistId}, Name: {artist.Name} - {artist.Biography}");
             }
         }
     }

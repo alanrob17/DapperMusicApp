@@ -1,4 +1,5 @@
-﻿using MusicDb.Repositories;
+﻿using MusicDb.Models;
+using MusicDb.Repositories;
 using MusicDb.Services.Output;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,10 @@ namespace MusicDb.Services
         {
             // await GetAllTrackRecordsAsync();
             // await GetAllTracksWithTechnicalDetailsAsync();
-            await GetFullListAsync();
+            // await GetFullListAsync();
+            // await GetArtistListAsync();
+            // await GetArtistRecordAsync();
+            await GetTotalAlbumTimeAsync();
         }
 
         private async Task GetAllTrackRecordsAsync()
@@ -75,6 +79,54 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteLineAsync("No tracks found in the full list.");
+            }
+        }
+
+        private async Task GetArtistListAsync()
+        {
+            var artistId = 26;
+            var tracks = await _repository.GetArtistListAsync(artistId);
+            if (tracks != null && tracks.Any())
+            {
+                await _output.WriteLineAsync("Full list of Artist tracks:");
+
+                foreach (var track in tracks)
+                {
+                    await _output.WriteLineAsync(track.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No tracks found in the full list.");
+            }
+        }
+
+        private async Task GetArtistRecordAsync()
+        {
+            var artistId = 26;
+            var recordId = 175;
+            var tracks = await _repository.GetArtistRecordAsync(artistId, recordId);
+            if (tracks != null && tracks.Any())
+            {
+                await _output.WriteLineAsync("Full list of an Artist and their Album:");
+
+                foreach (var track in tracks)
+                {
+                    await _output.WriteLineAsync(track.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No tracks found in the full list.");
+            }
+        }
+
+        private async Task GetTotalAlbumTimeAsync()
+        {
+            var totalTime = await _repository.GetTotalAlbumTimeAsync();
+            if (totalTime != null)
+            {
+                await _output.WriteLineAsync($"Total time for all albums: {totalTime.TotalLengthFormatted}");
             }
         }
     }
