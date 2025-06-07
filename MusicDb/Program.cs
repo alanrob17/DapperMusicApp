@@ -62,9 +62,9 @@ namespace MusicDb
                     .UseSerilog() // This will use the logger we configured above
                     .Build();
 
-                // await host.Services.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
+                await host.Services.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
                 // await host.Services.GetRequiredService<RecordDbService>().RunAllDatabaseOperations();
-                await host.Services.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
+                // await host.Services.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
                 // await host.Services.GetRequiredService<TrackDbService>().RunAllDatabaseOperations();
 
                 Log.Information("All database operations completed successfully");

@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -66,17 +68,27 @@ namespace MusicDb.Data
             using var connection = _connectionFactory.CreateConnection();
             var parameters = new DynamicParameters();
 
-            // Get only non-virtual, non-navigation properties
+            // Get properties to include in parameters
             var properties = typeof(T).GetProperties()
-                .Where(p => !p.GetGetMethod()?.IsVirtual == true && !p.PropertyType.IsClass || p.PropertyType == typeof(string));
+                .Where(p =>
+                    // Exclude virtual/navigation properties
+                    !p.GetGetMethod()?.IsVirtual == true &&
+                    // Include value types or strings, exclude other classes
+                    (!p.PropertyType.IsClass || p.PropertyType == typeof(string)) &&
+                    // Exclude properties with [NotMapped] attribute
+                    !Attribute.IsDefined(p, typeof(NotMappedAttribute)) &&
+                    // Exclude computed properties
+                    !Attribute.IsDefined(p, typeof(DatabaseGeneratedAttribute)) ||
+                    // Include identity columns (DatabaseGeneratedOption.Identity)
+                    (Attribute.IsDefined(p, typeof(DatabaseGeneratedAttribute)) &&
+                    p.GetCustomAttribute<DatabaseGeneratedAttribute>()?.DatabaseGeneratedOption != DatabaseGeneratedOption.Computed));
 
             foreach (var prop in properties)
             {
-                // Handle null values appropriately
-                var value = prop.GetValue(entity);
-                parameters.Add($"@{prop.Name}", value ?? (object)DBNull.Value);
+                    var value = prop.GetValue(entity);
+                    parameters.Add($"@{prop.Name}", value ?? (object)DBNull.Value);
+                    _logger.LogInformation("Adding parameter: {ParameterName} with value: {Value}", prop.Name, value);
             }
-
             // Add output parameter
             parameters.Add($"@{outputParameterName}", dbType: outputDbType, direction: ParameterDirection.Output);
 

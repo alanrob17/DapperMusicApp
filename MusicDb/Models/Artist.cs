@@ -35,8 +35,8 @@ namespace MusicDb.Models
         public virtual ICollection<Record> Records { get; set; } = new HashSet<Record>();
 
         // Computed property for display name
-        public string DisplayName =>
-            !string.IsNullOrWhiteSpace(Name) ? Name : $"{FirstName} {LastName}".Trim();
+        [NotMapped]
+        public string DisplayName => !string.IsNullOrWhiteSpace(Name) ? Name : $"{FirstName} {LastName}".Trim();
 
         public override string ToString()
         {
