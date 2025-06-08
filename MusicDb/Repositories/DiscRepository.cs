@@ -24,10 +24,10 @@ namespace MusicDb.Repositories
             return await _db.GetDataAsync<Disc>(sproc, new { });
         }
 
-        public async Task<IEnumerable<ArtistRecordDisc>> GetAllDiscLengthsAsync()
+        public async Task<IEnumerable<ArtistRecordDiscDto>> GetAllDiscLengthsAsync()
         {
             var sproc = "up_GetAllDiscLengths";
-            return await _db.GetDataAsync<ArtistRecordDisc>(sproc, new { });
+            return await _db.GetDataAsync<ArtistRecordDiscDto>(sproc, new { });
         }
     }
 }

@@ -11,6 +11,6 @@ namespace MusicDb.Repositories
     public interface IDiscRepository
     {
         Task<IEnumerable<Disc>> GetAllDiscsAsync();
-        Task<IEnumerable<ArtistRecordDisc>> GetAllDiscLengthsAsync();
+        Task<IEnumerable<ArtistRecordDiscDto>> GetAllDiscLengthsAsync();
     }
 }

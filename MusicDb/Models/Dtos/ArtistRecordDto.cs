@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicDb.Models.Dtos
 {
-    public class ArtistRecord
+    public class ArtistRecordDto
     {
         // Record properties
         public int RecordId { get; set; }
@@ -25,15 +25,9 @@ namespace MusicDb.Models.Dtos
         public string? ArtistFirstName { get; set; }
         public string? ArtistLastName { get; set; }
 
-        // Computed property
-        public string ArtistDisplayName =>
-            !string.IsNullOrWhiteSpace(ArtistName)
-                ? ArtistName
-                : $"{ArtistFirstName} {ArtistLastName}".Trim();
-
         public override string ToString()
         {
-            return $"Artist: {ArtistDisplayName} - Record Id: {RecordId}, Title: {Name}, Year: {Recorded}, Field: {Field}";
+            return $"Artist: {ArtistName} - Record Id: {RecordId}, Title: {Name}, Year: {Recorded}, Field: {Field}";
         }
     }
 }

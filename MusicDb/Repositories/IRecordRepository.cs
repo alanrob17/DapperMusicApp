@@ -11,6 +11,6 @@ namespace MusicDb.Repositories
     public interface IRecordRepository
     {
         Task<IEnumerable<Record>> GetAllRecordsAsync();
-        Task<IEnumerable<ArtistRecord>> GetAllArtistRecordsAsync();
+        Task<IEnumerable<ArtistRecordDto>> GetAllArtistRecordsAsync();
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MusicDb.Models.Dtos
 {
-    public class ArtistRecordDisc
+    public class ArtistRecordDiscDto
     {
         public int ArtistId { get; set; }
         public string? FirstName { get; set; }

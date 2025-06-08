@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MusicDb.Models.Dtos
 {
-    public class TotalTime
+    public class TotalTimeDto
     {
         public string TotalSeconds { get; set; }
         public string TotalLengthFormatted { get; set; }

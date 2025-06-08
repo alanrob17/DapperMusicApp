@@ -32,32 +32,32 @@ namespace MusicDb.Repositories
             return await _db.GetDataAsync<Track>(sproc, new { IncludeTechnicalDetails = includeTechDetails ? 1 : 0 });
         }
 
-        public Task<IEnumerable<ArtistRecordTrack>> GetFullListAsync()
+        public Task<IEnumerable<ArtistRecordTrackDto>> GetFullListAsync()
         {
             var sproc = "up_CompleteRecordList";
-            return _db.GetDataAsync<ArtistRecordTrack>(sproc, new { });
+            return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, new { });
         }
 
-        public Task<IEnumerable<ArtistRecordTrack>> GetArtistListAsync(int artistId)
+        public Task<IEnumerable<ArtistRecordTrackDto>> GetArtistListAsync(int artistId)
         {
             var sproc = "up_RecordListByArtist";
             var parameter = new { ArtistId = artistId };
-            return _db.GetDataAsync<ArtistRecordTrack>(sproc, parameter);
+            return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, parameter);
         }
 
-        public Task<IEnumerable<ArtistRecordTrack>> GetArtistRecordAsync(int artistId, int recordId)
+        public Task<IEnumerable<ArtistRecordTrackDto>> GetArtistRecordAsync(int artistId, int recordId)
         {
             var sproc = "up_ArtistRecordTracks";
             var parameters = new DynamicParameters();
             parameters.Add("@ArtistId", artistId);
             parameters.Add("@RecordId", recordId);
-            return _db.GetDataAsync<ArtistRecordTrack>(sproc, parameters);
+            return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, parameters);
         }
 
-        public async Task<TotalTime> GetTotalAlbumTimeAsync()
+        public async Task<TotalTimeDto> GetTotalAlbumTimeAsync()
         {
             var sproc = "adm_CalculateTotalAlbumTime";
-            TotalTime? totalTime = await _db.GetSingleAsync<TotalTime>(sproc, new { });
+            TotalTimeDto? totalTime = await _db.GetSingleAsync<TotalTimeDto>(sproc, new { });
 
             return totalTime;
         }

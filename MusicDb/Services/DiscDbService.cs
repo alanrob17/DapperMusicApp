@@ -21,8 +21,8 @@ namespace MusicDb.Services
 
         public async Task RunAllDatabaseOperations()
         {
-            // await GetAllDiscsAsync();
-            await GetAllDiscLengthsAsync();
+            await GetAllDiscsAsync();
+            // await GetAllDiscLengthsAsync();
         }
 
         private async Task GetAllDiscsAsync()

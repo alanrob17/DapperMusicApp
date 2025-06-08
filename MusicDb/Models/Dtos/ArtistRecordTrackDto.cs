@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicDb.Models.Dtos
 {
-    public class ArtistRecordTrack
+    public class ArtistRecordTrackDto
     {
         public int ArtistId { get; set; }
         public string? ArtistName { get; set; }

@@ -12,9 +12,9 @@ namespace MusicDb.Repositories
     {
         Task<IEnumerable<Track>> GetAllTracksAsync();
         Task<IEnumerable<Track>> GetAllTracksAsync(bool includeTechDetails = true);
-        Task<IEnumerable<ArtistRecordTrack>> GetFullListAsync();
-        Task<IEnumerable<ArtistRecordTrack>> GetArtistListAsync(int artistId);
-        Task<IEnumerable<ArtistRecordTrack>> GetArtistRecordAsync(int artistId, int recordId);
-        Task<TotalTime> GetTotalAlbumTimeAsync();
+        Task<IEnumerable<ArtistRecordTrackDto>> GetFullListAsync();
+        Task<IEnumerable<ArtistRecordTrackDto>> GetArtistListAsync(int artistId);
+        Task<IEnumerable<ArtistRecordTrackDto>> GetArtistRecordAsync(int artistId, int recordId);
+        Task<TotalTimeDto> GetTotalAlbumTimeAsync();
     }
 }
