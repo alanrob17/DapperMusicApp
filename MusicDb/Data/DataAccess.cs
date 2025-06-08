@@ -87,7 +87,7 @@ namespace MusicDb.Data
             {
                     var value = prop.GetValue(entity);
                     parameters.Add($"@{prop.Name}", value ?? (object)DBNull.Value);
-                    _logger.LogInformation("Adding parameter: {ParameterName} with value: {Value}", prop.Name, value);
+                    // _logger.LogInformation("Adding parameter: {ParameterName} with value: {Value}", prop.Name, value);
             }
             // Add output parameter
             parameters.Add($"@{outputParameterName}", dbType: outputDbType, direction: ParameterDirection.Output);
