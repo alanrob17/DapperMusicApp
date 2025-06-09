@@ -38,17 +38,15 @@ namespace MusicDb.Services
             // await CheckForArtistNameAsync("James Robson");
             // await GetArtistByFirstLastNameAsync("Bob", "Dylan");
             // await GetArtistByNameAsync("Jackson Browne");
-            await GetArtistIdByNameAsync("Bruce", "Cockburn");
-
-            // TODO: Create these methods.
-            // await GetArtistIdFromRecordAsync(5249);
-            // await GetArtistsWithNoBioAsync();
-            // await GetBiographyAsync(114);
+            // await GetArtistIdByNameAsync("Bruce", "Cockburn");
+            // await GetArtistIdFromRecordAsync(123);
             // await GetNoBiographyCountAsync();
-            // await GetBiographyFromRecordIdAsync(5249);
-            // await GetArtistNameFromRecordIdAsync(5249);
-            // await ShowArtistAsync(114);
-            // await GetArtistNameAsync(114);
+            // await GetArtistsWithNoBioAsync();
+            // await GetBiographyAsync(26);
+            // await GetBiographyFromRecordIdAsync(123);
+            // await GetArtistNameFromRecordIdAsync(123);
+            // await ShowArtistAsync(26);
+            await GetArtistNameAsync(26);
         }
 
         private async Task AddArtistWithoutFirstNameAsync()
@@ -215,27 +213,6 @@ namespace MusicDb.Services
             }
         }
 
-        private async Task UpdateArtistAsync()
-        {
-            var artistId = 414;
-            var firstName = "Ethan J";
-            var lastName = "Robson";
-            var name = "Ethan J Robson";
-            var biography = "Ethan J is a Dub music star.";
-            var folder = "G:\\Music\\Library\\Ethan J Robson";
-            var recordArtistId = 0; 
-
-            var updated = await _repository.UpdateArtistAsync(artistId, firstName, lastName, name, biography, folder, recordArtistId);
-            if (updated > 0)
-            {
-                await _output.WriteLineAsync($"Artist {name} updated successfully.");
-            }
-            else
-            {
-                await _output.WriteErrorAsync($"Failed to update artist {name}.");
-            }
-        }
-
         private async Task GetArtistByFirstLastNameAsync(string firstName, string lastName)
         {
             var artist = await _repository.GetArtistByFirstLastNameAsync(firstName, lastName);
@@ -259,6 +236,125 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteErrorAsync($"ArtistId not found for {firstName} {lastName}");
+            }
+        }
+
+        private async Task GetArtistIdFromRecordAsync(int recordId)
+        {
+            var artistId = await _repository.GetArtistIdFromRecordAsync(recordId);
+            if (artistId > 0)
+            {
+                await _output.WriteLineAsync($"ArtistId: {artistId} found for RecordId: {recordId}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"ArtistId not found for RecordId: {recordId}");
+            }
+        }
+
+        private async Task GetNoBiographyCountAsync()
+        {
+            int count = await _repository.GetNoBiographyCountAsync();
+            await _output.WriteLineAsync($"Total Artists with no biography: {count}");
+        }
+
+        private async Task GetArtistsWithNoBioAsync()
+        {
+            var artists = await _repository.GetArtistsWithNoBioAsync();
+
+            await _output.WriteLineAsync($"Artists with no biography: {artists.Count()}");
+
+            foreach (var artist in artists)
+            {
+                await _output.WriteLineAsync(artist.ToString());
+            }
+        }
+
+        private async Task GetBiographyAsync(int artistId)
+        {
+            var artist = await _repository.GetBiographyAsync(artistId);
+            if (artist is not null)
+            {
+                var biography = ToHtml(artist);
+                await _output.WriteLineAsync(biography);
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"ArtistId: {artistId} not found.");
+            }
+        }
+
+        private async Task GetBiographyFromRecordIdAsync(int recordId)
+        {
+            var biography = await _repository.GetBiographyFromRecordIdAsync(recordId);
+            if (!string.IsNullOrEmpty(biography))
+            {
+                await _output.WriteLineAsync($"Biography: {biography}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No biography found for RecordId: {recordId}");
+            }
+        }
+
+        private async Task GetArtistNameFromRecordIdAsync(int recordId)
+        {
+            var artistName = await _repository.GetArtistNameByRecordIdAsync(recordId);
+            if (!string.IsNullOrEmpty(artistName))
+            {
+                await _output.WriteLineAsync($"Artist Name: {artistName}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No artist found for RecordId: {recordId}");
+            }
+        }
+
+        private async Task ShowArtistAsync(int artistId)
+        {
+            var artist = await _repository.ShowArtistAsync(artistId);
+            if (artist is not null)
+            {
+                var artistHtml = ToHtml(artist);
+                await _output.WriteLineAsync(artistHtml);
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"ArtistId: {artistId} not found.");
+            }
+        }
+
+        private async Task GetArtistNameAsync(int artistId)
+        {
+            var artistName = await _repository.GetArtistNameAsync(artistId);
+            if (!string.IsNullOrEmpty(artistName))
+            {
+                await _output.WriteLineAsync($"Artist Name: {artistName}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No artist found for ArtistId: {artistId}");
+            }
+        }
+
+        private async Task UpdateArtistAsync()
+        {
+            var artistId = 414;
+            var firstName = "Ethan J";
+            var lastName = "Robson";
+            var name = "Ethan J Robson";
+            var biography = "Ethan J is a Dub music star.";
+            var folder = "G:\\Music\\Library\\Ethan J Robson";
+            var recordArtistId = 0;
+
+            var updated = await _repository.UpdateArtistAsync(artistId, firstName, lastName, name, biography, folder, recordArtistId);
+            if (updated > 0)
+            {
+                await _output.WriteLineAsync($"Artist {name} updated successfully.");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"Failed to update artist {name}.");
             }
         }
 
@@ -311,6 +407,42 @@ namespace MusicDb.Services
             {
                 await _output.WriteErrorAsync($"Failed to delete artist: {name}");
             }
+        }
+
+        private string ToHtml(Artist artist)
+        {
+            var artistDetails = new StringBuilder();
+
+            artistDetails.Append($"<p><strong>ArtistId: </strong>{artist.ArtistId}</p>\n");
+
+            if (!string.IsNullOrEmpty(artist.FirstName))
+            {
+                artistDetails.Append($"<p><strong>First Name: </strong>{artist.FirstName}</p>\n");
+            }
+
+            artistDetails.Append($"<p><strong>Last Name: </strong>{artist.LastName}</p>\n");
+
+            if (!string.IsNullOrEmpty(artist.Name))
+            {
+                artistDetails.Append($"<p><strong>Name: </strong>{artist.Name}</p>\n");
+            }
+
+            if (!string.IsNullOrEmpty(artist.Folder))
+            {
+                artistDetails.Append($"<p><strong>Folder: </strong>{artist.Folder}</p>\n");
+            }
+
+            if (artist.RecordArtistId > 0)
+            {
+                artistDetails.Append($"<p><strong>Record Artist Id: </strong>{artist.RecordArtistId}</p>\n");
+            }
+
+            if (!string.IsNullOrEmpty(artist.Biography))
+            {
+                artistDetails.Append($"<p><strong>Biography: </strong></p>\n<div>\n{artist.Biography}\n</div>\n");
+            }
+
+            return artistDetails.ToString();
         }
     }
 }

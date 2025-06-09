@@ -117,14 +117,70 @@ namespace MusicDb.Repositories
 
         public async Task<int> GetArtistIdAsync(string firstName, string lastName)
         {
-            // TODO: I need to fix this as it isn't retruning a value.
             var sproc = "up_getArtistIdByName";
             var parameters = new DynamicParameters();
             parameters.Add("@FirstName", firstName);
             parameters.Add("@LastName", lastName);
-            parameters.Add("@ArtistId", 0, DbType.Int32, ParameterDirection.Output);
             int id = await _db.GetCountOrIdAsync(sproc, parameters);
             return id;
+        }
+
+        public async Task<int> GetArtistIdFromRecordAsync(int recordId)
+        {
+            var sproc = "up_getArtistIdFromRecordId";
+            var parameter = new { RecordId = recordId };
+            return await _db.GetCountOrIdAsync(sproc, parameter);
+        }
+
+        public async Task<int> GetNoBiographyCountAsync()
+        {
+            var sproc = "up_NoBiographyCount";
+            return await _db.GetCountOrIdAsync(sproc, new { });
+        }
+
+        public async Task<IEnumerable<Artist>> GetArtistsWithNoBioAsync()
+        {
+            var sproc = "up_selectArtistsWithNoBio";
+            return await _db.GetDataAsync<Artist>(sproc, new { });
+        }
+
+        public async Task<Artist?> GetBiographyAsync(int artistId)
+        {
+            var sproc = "up_ArtistSelectById";
+            var parameters = new { ArtistId = artistId };
+            return await _db.GetSingleAsync<Artist>(sproc, parameters);
+        }
+
+        public async Task<string> GetBiographyFromRecordIdAsync(int recordId)
+        {
+            var sproc = "up_GetBiography";
+            var parameter = new { RecordId = recordId };
+            return await _db.GetTextAsync(sproc, parameter);
+        }
+
+        public async Task<string> GetArtistNameByRecordIdAsync(int recordId)
+        {
+            var sproc = "up_GetArtistNameByRecordId";
+            var parameter = new { RecordId = recordId };
+            Artist artist = await _db.GetSingleAsync<Artist>(sproc, parameter);
+
+            return artist?.Name ?? string.Empty;
+        }
+
+        public async Task<Artist> ShowArtistAsync(int artistId)
+        {
+            var sproc = "up_ArtistSelectById";
+            var parameter = new { ArtistId = artistId };
+            return await _db.GetSingleAsync<Artist>(sproc, parameter);
+        }
+
+        public async Task<string> GetArtistNameAsync(int artistId)
+        {
+            var sproc = "up_GetArtistNameByArtistId";
+            var parameters = new { ArtistId = artistId };
+            var name = await _db.GetTextAsync(sproc, parameters);
+
+            return name ?? string.Empty;
         }
 
         public async Task<int> UpdateArtistAsync(Artist artist)

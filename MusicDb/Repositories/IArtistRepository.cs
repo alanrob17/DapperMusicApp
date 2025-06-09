@@ -25,5 +25,13 @@ namespace MusicDb.Repositories
         Task<int> UpdateArtistAsync(int artistId, string firstName, string lastName, string name, string biography, string folder, int recordArtistId);
         Task<bool> DeleteArtistAsync(int artistId);
         Task<bool> DeleteArtistAsync(string name);
+        Task<int> GetArtistIdFromRecordAsync(int recordId);
+        Task<int> GetNoBiographyCountAsync();
+        Task<IEnumerable<Artist>> GetArtistsWithNoBioAsync();
+        Task<Artist> GetBiographyAsync(int artistId);
+        Task<string?> GetBiographyFromRecordIdAsync(int recordId);
+        Task<string?> GetArtistNameByRecordIdAsync(int recordId);
+        Task<string> GetArtistNameAsync(int artistId);
+        Task<Artist> ShowArtistAsync(int artistId);
     }
 }
