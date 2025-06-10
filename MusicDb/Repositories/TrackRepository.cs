@@ -59,7 +59,7 @@ namespace MusicDb.Repositories
             var sproc = "adm_CalculateTotalAlbumTime";
             TotalTimeDto? totalTime = await _db.GetSingleAsync<TotalTimeDto>(sproc, new { });
 
-            return totalTime;
+            return totalTime ?? new TotalTimeDto() { }; 
         }
     }
 }
