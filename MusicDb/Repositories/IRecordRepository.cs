@@ -20,5 +20,7 @@ namespace MusicDb.Repositories
         Task<Artist> GetArtistFromRecordArtistIdAsync(int artistId);
         Task<TotalTimeDto?> GetTotalAlbumTimeByArtistIdAsync(int artistId);
         Task<Artist> GetArtistFromNameAsync(string name);
+        Task<int> AddRecordAsync(Record record);
+        Task<int> UpdateRecordAsync(Record record);
     }
 }

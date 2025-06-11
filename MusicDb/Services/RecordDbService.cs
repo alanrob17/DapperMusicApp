@@ -28,18 +28,18 @@ namespace MusicDb.Services
             // await GetArtistRecordByIdAsync(1076);
             // await CountTotalRecordsAsync();
             // await GetRecordsByArtistIdAsync(26);
-            // TODO: finish next method
-            //await GetTotalAlbumTimeAsync();
+            // await GetTotalAlbumTimeAsync();
             // await GetArtistFromRecordArtistIdAsync(26);
             // await GetTotalTimeByArtistIdAsync(160);
             // await GetArtistFromArtistNameAsync("Neil Young");
-            await GetTotalTimeByArtistNameAsync("The Band");
+            // await GetTotalTimeByArtistNameAsync("Yes");
+            // await AddNewRecord();
+            // await AddNewRecord(413, "Double Bass Extroadinaire!", "Continuing Best of James Robson", "Rock", 2025, 3, "G:\\Music\\Library\\James Robson\\2025 - Double Bass Extroadinaire!\\cover.jpg", "This is James' second album.", "G:\\Music\\Library\\James Robson\\2025 - Double Bass Extroadinaire!", "0:2:25:26");
+            // await UpdateRecordAsync();
+            // TODO: Uncomment and implement the following method
+            // await UpdateRecordAsync(5291, "Rockin' The Boogie Bass Again", "Rock", 2023, "Wibble Wobble Music", "Aus", "***", 1, "CD", DateTime.Now, 19.99m, "", "This is Charlies's second album.");
 
             // TODO: Uncomment and implement the following methods as needed
-            // await AddNewRecord();
-            // await AddNewRecord(893, "Hip-Hop TipTop", "Rock", 2025, "Wobble Dobble Music", "Aus", "***", 1, "CD", DateTime.Now, 19.99m, "", "This is Charlie's second album.");
-            // await UpdateRecordAsync();
-            // await UpdateRecordAsync(5291, "Rockin' The Boogie Bass Again", "Rock", 2023, "Wibble Wobble Music", "Aus", "***", 1, "CD", DateTime.Now, 19.99m, "", "This is Charlies's second album.");
             // await DeleteRecordAsync(5294);
             // await GetArtistRecordsAsync(114);
             // await GetNoRecordReviewsAsync();
@@ -210,6 +210,87 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteErrorAsync($"No artist found for ArtistId: {artistId}.");
+            }
+        }
+
+        private async Task AddNewRecord()
+        {
+            var recordId = await _repository.AddRecordAsync(new Record
+            {
+                ArtistId = 413,
+                Name = "Bass Extroadinaire!",
+                SubTitle = "The Best of James Robson",
+                Field = "Rock",
+                Recorded = 2024,
+                Discs = 2,
+                CoverName = "G:\\Music\\Library\\James Robson\\2024 - Bass Extroadinaire!\\cover.jpg",
+                Review = "This is James' first album.",
+                Folder = "G:\\Music\\Library\\James Robson",
+                Length = "0:1:00:00"
+            });
+
+            if (recordId > 0)
+            {
+                await _output.WriteLineAsync($"Record with Id: {recordId} added successfully");
+            }
+            else
+            {
+                await _output.WriteErrorAsync("Failed to add record!");
+            }
+        }
+
+            // ArtistId, Name, SubTitle, Field, Recorded, Discs, CoverName, Review, Folder, Length
+        private async Task AddNewRecord(int artistId, string name, string subTitle, string field, int recorded, int discs, string coverName, string review, string folder, string length)
+        {
+            var recordId = await _repository.AddRecordAsync(new Record
+            {
+                ArtistId = artistId,
+                Name = name,
+                SubTitle = subTitle,
+                Field = field,
+                Recorded = recorded,
+                Discs = discs,
+                CoverName = coverName,
+                Review = review,
+                Folder = folder,
+                Length = length
+            });
+
+            if (recordId > 0)
+            {
+                await _output.WriteLineAsync($"Record added successfully with RecordId: {recordId}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync("Failed to add record.");
+            }
+        }
+
+        private async Task UpdateRecordAsync()
+        {
+            var record = new Record
+            {
+                RecordId = 3278,
+                ArtistId = 413,
+                Name = "Jazz Rock Bass Extroadinaire!",
+                SubTitle = "James Robson's Greatest Hits",
+                Field = "Jazz",
+                Recorded = 2025,
+                Discs = 2,
+                CoverName = "G:\\Music\\Library\\James Robson\\2024 - Jazz Rock Bass Extroadinaire!\\cover.jpg",
+                Review = "This is James' first album.",
+                Folder = "G:\\Music\\Library\\James Robson\\2024 - Jazz Rock Bass Extroadinaire!",
+                Length = "0:2:20:10"
+            };
+
+            var rowsAffected = await _repository.UpdateRecordAsync(record);
+            if (rowsAffected > 0)
+            {
+                await _output.WriteLineAsync($"Record with ID {record.RecordId} updated successfully.");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"Failed to update record with ID {record.RecordId}.");
             }
         }
     }

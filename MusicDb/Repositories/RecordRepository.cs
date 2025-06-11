@@ -4,6 +4,7 @@ using MusicDb.Models;
 using MusicDb.Models.Dtos;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,7 +97,6 @@ namespace MusicDb.Repositories
                 Name = "Unknown Artist"
             };
         }
-
         public async Task<Artist> GetArtistFromNameAsync(string name)
         {
             string sproc = "up_GetArtistByName";
@@ -104,5 +104,15 @@ namespace MusicDb.Repositories
             return await _db.GetSingleAsync<Artist>(sproc, parameter);
         }
 
+        public async Task<int> AddRecordAsync(Record record)
+        {
+            return await _db.SaveDataAsync("adm_RecordInsert", record, outputParameterName: "RecordId");
+        }
+
+        public async Task<int> UpdateRecordAsync(Record record)
+        {
+            var sproc = "adm_UpdateRecord";
+            return await _db.SaveDataAsync(sproc, record, "Result", DbType.Int32);
+        }
     }
 }
