@@ -104,6 +104,51 @@ namespace MusicDb.Repositories
             return await _db.GetSingleAsync<Artist>(sproc, parameter);
         }
 
+        public async Task<IEnumerable<Record>> GetArtistRecordsAsync(int artistId)
+        {
+            string sproc = "up_GetRecordsByArtistId";
+            var parameter = new { ArtistId = artistId };
+            return await _db.GetDataAsync<Record>(sproc, parameter);
+        }
+
+        public async Task<IEnumerable<ArtistRecordReviewDto>> NoRecordReviewsAsync()
+        {
+            string sproc = "up_GetNoRecordReview";
+            return await _db.GetDataAsync<ArtistRecordReviewDto>(sproc, new { });
+        }
+
+        public async Task<int> CountDiscsAsync(string show)
+        {
+            string sproc = "up_CountDiscs";
+            var parameter = new DynamicParameters();
+            parameter.Add("@Show", show);
+            var discs = await _db.GetCountOrIdAsync(sproc, parameter);
+            return discs;
+        }
+
+        public async Task<int> GetArtistNumberOfRecordsAsync(int artistId)
+        {
+            string sproc = "up_GetArtistNumberOfRecords";
+            var parameter = new DynamicParameters();
+            parameter.Add("@ArtistId", artistId);
+            return await _db.GetCountOrIdAsync(sproc, parameter);
+        }
+
+        public async Task<int> GetArtistNumberOfRecordsAsync(string name)
+        {
+            string sproc = "up_GetArtistNumberOfRecordsByName";
+            var parameter = new DynamicParameters();
+            parameter.Add("@ArtistName", name);
+            return await _db.GetCountOrIdAsync(sproc, parameter);
+        }
+
+        public async Task<Record> GetRecordByNameAsync(string name)
+        {
+            var sproc = "up_GetRecordByPartialName";
+            var parameter = new { Name = name };
+            return await _db.GetSingleAsync<Record>(sproc, parameter);
+        }
+
         public async Task<int> AddRecordAsync(Record record)
         {
             return await _db.SaveDataAsync("adm_RecordInsert", record, outputParameterName: "RecordId");
@@ -113,6 +158,14 @@ namespace MusicDb.Repositories
         {
             var sproc = "adm_UpdateRecord";
             return await _db.SaveDataAsync(sproc, record, "Result", DbType.Int32);
+        }
+
+        public async Task<bool> DeleteRecordAsync(int recordId)
+        {
+            var sproc = "up_DeleteRecord";
+            var parameter = new { RecordId = recordId };
+            var rowsAffected = await _db.DeleteDataAsync(sproc, parameter);
+            return rowsAffected > 0;
         }
     }
 }

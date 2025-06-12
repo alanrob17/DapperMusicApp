@@ -20,7 +20,13 @@ namespace MusicDb.Repositories
         Task<Artist> GetArtistFromRecordArtistIdAsync(int artistId);
         Task<TotalTimeDto?> GetTotalAlbumTimeByArtistIdAsync(int artistId);
         Task<Artist> GetArtistFromNameAsync(string name);
+        Task<IEnumerable<Record>> GetArtistRecordsAsync(int artistId);
+        Task<IEnumerable<ArtistRecordReviewDto>> NoRecordReviewsAsync();
+        Task<int> CountDiscsAsync(string show);
+        Task<int> GetArtistNumberOfRecordsAsync(int artistId);
+        Task<int> GetArtistNumberOfRecordsAsync(string name);
         Task<int> AddRecordAsync(Record record);
         Task<int> UpdateRecordAsync(Record record);
+        Task<bool> DeleteRecordAsync(int recordId);
     }
 }

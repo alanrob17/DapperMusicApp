@@ -36,16 +36,16 @@ namespace MusicDb.Services
             // await AddNewRecord();
             // await AddNewRecord(413, "Double Bass Extroadinaire!", "Continuing Best of James Robson", "Rock", 2025, 3, "G:\\Music\\Library\\James Robson\\2025 - Double Bass Extroadinaire!\\cover.jpg", "This is James' second album.", "G:\\Music\\Library\\James Robson\\2025 - Double Bass Extroadinaire!", "0:2:25:26");
             // await UpdateRecordAsync();
-            // TODO: Uncomment and implement the following method
-            // await UpdateRecordAsync(5291, "Rockin' The Boogie Bass Again", "Rock", 2023, "Wibble Wobble Music", "Aus", "***", 1, "CD", DateTime.Now, 19.99m, "", "This is Charlies's second album.");
+            // await UpdateRecordAsync(3278, 413, "Bass Extroadinaire!", "James' Greatest Hits", "Rock", 2024, 2, "G:\\Music\\Library\\James Robson\\2024 - Bass Extroadinaire!\\cover.jpg", "This is James' first album.", "G:\\Music\\Library\\James Robson\\2024 - Bass Extroadinaire!", "0:2:20:10");
+            // await DeleteRecordAsync(3278);
+            // await GetArtistRecordsAsync(26);
+            // await GetNoRecordReviewsAsync();
+            // await CountDiscsAsync("Blues");
+            // await GetArtistNumberOfRecordsAsync(26);
+            // await GetArtistNumberOfRecordsAsync("Bob Dylan");
+            // await GetRecordByNameAsync("Doggo");
 
             // TODO: Uncomment and implement the following methods as needed
-            // await DeleteRecordAsync(5294);
-            // await GetArtistRecordsAsync(114);
-            // await GetNoRecordReviewsAsync();
-            // await CountDiscsAsync("All");
-            // await GetArtistNumberOfRecordsAsync(114);
-            // await GetRecordByNameAsync("Doggo");
             // await GetRecordsByNameAsync("Bringing");
             // await GetArtistNameFromRecordAsync(3232);
             // await GetRecordNumberByYearAsync(1974);
@@ -213,6 +213,78 @@ namespace MusicDb.Services
             }
         }
 
+        private async Task GetArtistRecordsAsync(int artistId)
+        {
+
+            var records = await _repository.GetArtistRecordsAsync(artistId);
+            foreach (var record in records)
+            {
+                await _output.WriteLineAsync(record.ToString());
+            }
+        }
+
+        private async Task GetNoRecordReviewsAsync()
+        {
+            var records = await _repository.NoRecordReviewsAsync();
+            foreach (var record in records)
+            {
+                await _output.WriteLineAsync($"ArtistId: {record.ArtistId} - Artist: {record.ArtistName} - Record Id: {record.RecordId}: {record.Recorded} - {record.RecordName}");
+            }
+        }
+
+        private async Task CountDiscsAsync(string show)
+        {
+            var discs = await _repository.CountDiscsAsync(show);
+            await _output.WriteLineAsync($"{show}: Total Discs: {discs}");
+        }
+
+        private async Task GetArtistNumberOfRecordsAsync(int artistId)
+        {
+            var records = await _repository.GetArtistNumberOfRecordsAsync(artistId);
+            if (records > 0)
+            {
+                await _output.WriteLineAsync($"ArtistId: {artistId} - Number of Records: {records}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No records found for ArtistId: {artistId}");
+            }
+        }
+
+        private async Task GetArtistNumberOfRecordsAsync(string name)
+        {
+            int records = await _repository.GetArtistNumberOfRecordsAsync(name);
+            if (records > 0)
+            {
+                await _output.WriteLineAsync($"Artist: {name} - Number of Records: {records}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No records found for Artist: {name}");
+            }
+        }
+
+        //private async Task GetRecordByNameAsync(string name)
+        //{
+        //    var record = await _repository.GetRecordByNameAsync(name);
+        //    if (record is not null)
+        //    {
+        //        var artistName = await _repository.GetArtistNameFromRecordAsync(record.RecordId);
+        //        if (artistName is not null)
+        //        {
+        //            await _output.WriteLineAsync($"Artist: {artistName} - Record: {record.Name} - {record.Recorded}");
+        //        }
+        //        else
+        //        {
+        //            await _output.WriteErrorAsync($"No artist found for record: {name}");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        await _output.WriteErrorAsync($"Record: {name} not found.");
+        //    }
+        //}
+
         private async Task AddNewRecord()
         {
             var recordId = await _repository.AddRecordAsync(new Record
@@ -239,7 +311,6 @@ namespace MusicDb.Services
             }
         }
 
-            // ArtistId, Name, SubTitle, Field, Recorded, Discs, CoverName, Review, Folder, Length
         private async Task AddNewRecord(int artistId, string name, string subTitle, string field, int recorded, int discs, string coverName, string review, string folder, string length)
         {
             var recordId = await _repository.AddRecordAsync(new Record
@@ -291,6 +362,47 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteErrorAsync($"Failed to update record with ID {record.RecordId}.");
+            }
+        }
+
+        private async Task UpdateRecordAsync(int recordId, int artistId, string name, string subTitle, string field, int recorded, int discs, string coverName, string review, string folder, string length)
+        {
+            var record = new Record
+            {
+                RecordId = recordId,
+                ArtistId = artistId,
+                Name = name,
+                SubTitle = subTitle,
+                Field = field,
+                Recorded = recorded,
+                Discs = discs,
+                CoverName = coverName,
+                Review = review,
+                Folder = folder,
+                Length = length
+            };
+
+            var rowsAffected = await _repository.UpdateRecordAsync(record);
+            if (rowsAffected > 0)
+            {
+                await _output.WriteLineAsync($"Record Id: {recordId} updated successfully.");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"Failed to update record with Id: {recordId}.");
+            }
+        }
+
+        private async Task DeleteRecordAsync(int recordId)
+        {
+            var result = await _repository.DeleteRecordAsync(recordId);
+            if (result)
+            {
+                await _output.WriteLineAsync($"Record with ID {recordId} deleted successfully.");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"Failed to delete record with ID {recordId}.");
             }
         }
     }
