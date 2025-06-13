@@ -43,27 +43,16 @@ namespace MusicDb.Services
             // await CountDiscsAsync("Blues");
             // await GetArtistNumberOfRecordsAsync(26);
             // await GetArtistNumberOfRecordsAsync("Bob Dylan");
-            // await GetRecordByNameAsync("Doggo");
-
-            // TODO: Uncomment and implement the following methods as needed
+            // await GetRecordByNameAsync("Blonde");
             // await GetRecordsByNameAsync("Bringing");
-            // await GetArtistNameFromRecordAsync(3232);
+            // await GetArtistNameFromRecordAsync(1373);
             // await GetRecordNumberByYearAsync(1974);
-            // await GetTotalNumberOfCDsAsync();
+            // await GetRecordListByYearAsync(1974);
             // await GetNoReviewCountAsync();
-            // await GetBoughtDiscCountForYearAsync(2022);
-            // await GetTotalCostForYearAsync(2017);
-            // await GetTotalNumberOfDiscsAsync();
             // await GetRecordDetailsAsync(3232);
-            // await GetTotalArtistCostAsync();
             // await GetTotalArtistDiscsAsync();
-            // await GetRecordListbyArtistAsync(114);
             // await GetRecordHtmlAsync(3232);
-            // await GetDiscCountForYearAsync(1974);
-            // await GetArtistRecordListAsync();
-            // await GetTotalNumberOfRecordsAsync();
-            // await GetTotalNumberOfBluraysAsync();
-            // await GetTotalNumberOfDVDsAsync();
+            await GetRecordListAsync(26);
         }
 
         private async Task GetAllRecordsAsync()
@@ -264,26 +253,72 @@ namespace MusicDb.Services
             }
         }
 
-        //private async Task GetRecordByNameAsync(string name)
-        //{
-        //    var record = await _repository.GetRecordByNameAsync(name);
-        //    if (record is not null)
-        //    {
-        //        var artistName = await _repository.GetArtistNameFromRecordAsync(record.RecordId);
-        //        if (artistName is not null)
-        //        {
-        //            await _output.WriteLineAsync($"Artist: {artistName} - Record: {record.Name} - {record.Recorded}");
-        //        }
-        //        else
-        //        {
-        //            await _output.WriteErrorAsync($"No artist found for record: {name}");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        await _output.WriteErrorAsync($"Record: {name} not found.");
-        //    }
-        //}
+        private async Task GetRecordByNameAsync(string name)
+        {
+            var record = await _repository.GetRecordByNameAsync(name);
+            if (record is not null)
+            {
+                await _output.WriteLineAsync(record.ToString());
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"Record: {name} not found.");
+            }
+        }
+
+        private async Task GetRecordsByNameAsync(string name)
+        {
+            var records = await _repository.GetRecordsByNameAsync(name);
+            if (records is not null)
+            {
+                foreach (var record in records)
+                {
+                        await _output.WriteLineAsync(record.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No records found for name: {name}");
+            }
+        }
+
+        private async Task GetArtistNameFromRecordAsync(int recordId)
+        {
+            var artistName = await _repository.GetArtistNameFromRecordAsync(recordId);
+            if (!string.IsNullOrEmpty(artistName))
+            {
+                await _output.WriteLineAsync($"Artist Name: {artistName}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No artist found for record ID: {recordId}");
+            }
+        }
+
+        private async Task GetRecordListByYearAsync(int year)
+        {
+            var records = await _repository.GetRecordsByRecordedYearAsync(year);
+            if (records is not null)
+            {
+                foreach (var record in records)
+                {
+                    await _output.WriteLineAsync(record.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No records found for Year recorded: {year}");
+            }
+        }
+
+        private async Task GetTotalArtistDiscsAsync()
+        {
+            var totals = await _repository.GetTotalArtistDiscsAsync();
+            foreach (var total in totals)
+            {
+                await _output.WriteLineAsync($"ArtistId: {total.ArtistId}, Artist: {total.Name} - Total Discs: {total.TotalDiscs}");
+            }
+        }
 
         private async Task AddNewRecord()
         {
@@ -308,6 +343,81 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteErrorAsync("Failed to add record!");
+            }
+        }
+
+        private async Task GetRecordNumberByYearAsync(int year)
+        {
+            var records = await _repository.GetRecordNumberByYearAsync(year);
+            if (records > 0)
+            {
+                await _output.WriteLineAsync($"Total records for year {year}: {records}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"No records found for year: {year}");
+            }
+        }
+
+        private async Task GetNoReviewCountAsync()
+        {
+            var count = await _repository.GetNoReviewCountAsync();
+            if (count > 0)
+            {
+                await _output.WriteLineAsync($"Total number of records with no reviews: {count}");
+            }
+            else
+            {
+                await _output.WriteErrorAsync("No records found with no reviews.");
+            }
+        }
+
+        private async Task GetRecordDetailsAsync(int recordId)
+        {
+
+            var record = await _repository.GetRecordDetailsAsync(recordId);
+            if (record is not null)
+            {
+                await _output.WriteLineAsync(record.ToString());
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"Record with ID {recordId} not found.");
+            }
+        }
+
+        private async Task GetRecordHtmlAsync(int recordId)
+        {
+            ArtistRecordDto record = await _repository.GetRecordHtmlAsync(recordId);
+            if (record is not null)
+            {
+                string recordHtml = RecordHtml(record);
+                await _output.WriteLineAsync(recordHtml);
+            }
+            else
+            {
+                await _output.WriteErrorAsync($"Record with ID {recordId} not found.");
+            }
+        }
+
+        private async Task GetRecordListAsync(int artistId)
+        {
+            var records = (IEnumerable<Record>)await _repository.GetRecordListAsync(artistId);
+
+            var recordDictionary = new Dictionary<int, string>
+            {
+                { 0, "Select a Record" }
+            };
+
+            foreach (var record in records)
+            {
+                recordDictionary.Add(record.RecordId, $"{record.Recorded} - {record.Name}");
+            }
+
+            await _output.WriteLineAsync("Record List:");
+            foreach (var kvp in recordDictionary)
+            {
+                await _output.WriteLineAsync($"{kvp.Key}: {kvp.Value}");
             }
         }
 
@@ -404,6 +514,21 @@ namespace MusicDb.Services
             {
                 await _output.WriteErrorAsync($"Failed to delete record with ID {recordId}.");
             }
+        }
+
+        private string RecordHtml(ArtistRecordDto record)
+        {
+            var recordHtml = $@"
+                <h1>{record.Name}</h1>
+                <h2>Artist: {record.ArtistName}</h2>
+                <p>ArtistId: {record.ArtistId}</p>
+                <p>RecordId: {record.RecordId}</p>
+                <p>Field: {record.Field}</p>
+                <p>Recorded: {record.Recorded}</p>
+                <p>Discs: {record.Discs}</p>
+                <p>Review: {record.Review}</p>
+                <p>Album length: {record.Length}</p>";
+            return recordHtml;
         }
     }
 }

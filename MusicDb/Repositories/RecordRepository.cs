@@ -142,11 +142,73 @@ namespace MusicDb.Repositories
             return await _db.GetCountOrIdAsync(sproc, parameter);
         }
 
-        public async Task<Record> GetRecordByNameAsync(string name)
+        public async Task<ArtistRecordDto> GetRecordByNameAsync(string name)
         {
             var sproc = "up_GetRecordByPartialName";
             var parameter = new { Name = name };
-            return await _db.GetSingleAsync<Record>(sproc, parameter);
+            return await _db.GetSingleAsync<ArtistRecordDto>(sproc, parameter);
+        }
+
+        public async Task<IEnumerable<ArtistRecordDto>> GetRecordsByNameAsync(string name)
+        {
+            var sproc = "up_GetRecordByPartialName";
+            var parameter = new { Name = name };
+            return await _db.GetDataAsync<ArtistRecordDto>(sproc, parameter);
+        }
+
+        public async Task<string> GetArtistNameFromRecordAsync(int recordId)
+        {
+            var sproc = "up_GetArtistNameByRecordId";
+            var parameter = new { RecordId = recordId };
+            var name = await _db.GetTextAsync(sproc, parameter);
+            return name ?? string.Empty;
+        }
+
+        public async Task<int> GetRecordNumberByYearAsync(int year)
+        {
+            var sproc = "up_GetRecordedYearNumber";
+            var parameter = new { Year = year };
+            return await _db.GetCountOrIdAsync(sproc, parameter);
+        }
+
+        public async Task<IEnumerable<ArtistRecordDto>> GetRecordsByRecordedYearAsync(int year)
+        {
+            var sproc = "up_GetRecordsByYearRecorded";
+            var parameter = new { Year = year };
+            return await _db.GetDataAsync<ArtistRecordDto>(sproc, parameter);
+        }
+
+        public async Task<int> GetNoReviewCountAsync()
+        {
+            var sproc = "up_GetNoRecordReviewCount";
+            return await _db.GetCountOrIdAsync(sproc, new { });
+        }
+
+        public async Task<ArtistRecordDto> GetRecordDetailsAsync(int recordId)
+        {
+            var sproc = "up_getSingleArtistAndRecord";
+            var parameter = new { RecordId = recordId };
+            return await _db.GetSingleAsync<ArtistRecordDto>(sproc, parameter);
+        }
+
+        public async Task<IEnumerable<TotalDiscsDto>> GetTotalArtistDiscsAsync()
+        {
+            var sproc = "up_GetTotalDiscsForEachArtist";
+            return await _db.GetDataAsync<TotalDiscsDto>(sproc, new { });
+        }
+
+        public async Task<ArtistRecordDto> GetRecordHtmlAsync(int recordId)
+        {
+            var sproc = "up_getSingleArtistAndRecord";
+            var parameter = new { RecordId = recordId };
+            return await _db.GetSingleAsync<ArtistRecordDto>(sproc, parameter);
+        }
+
+        public async Task<IEnumerable<Record>> GetRecordListAsync(int artistId)
+        {
+            var sproc = "up_RecordSelectByArtistId";
+            var parameter = new { ArtistId = artistId };
+            return await _db.GetDataAsync<Record>(sproc, parameter);
         }
 
         public async Task<int> AddRecordAsync(Record record)

@@ -25,6 +25,16 @@ namespace MusicDb.Repositories
         Task<int> CountDiscsAsync(string show);
         Task<int> GetArtistNumberOfRecordsAsync(int artistId);
         Task<int> GetArtistNumberOfRecordsAsync(string name);
+        Task<ArtistRecordDto> GetRecordByNameAsync(string name);
+        Task<IEnumerable<ArtistRecordDto>> GetRecordsByNameAsync(string name);
+        Task<string> GetArtistNameFromRecordAsync(int recordId);
+        Task<int> GetRecordNumberByYearAsync(int year);
+        Task<IEnumerable<ArtistRecordDto>> GetRecordsByRecordedYearAsync(int year);
+        Task<int> GetNoReviewCountAsync();
+        Task<ArtistRecordDto> GetRecordDetailsAsync(int recordId);
+        Task<IEnumerable<TotalDiscsDto>> GetTotalArtistDiscsAsync();
+        Task<ArtistRecordDto> GetRecordHtmlAsync(int recordId);
+        Task<IEnumerable<Record>> GetRecordListAsync(int artistId);
         Task<int> AddRecordAsync(Record record);
         Task<int> UpdateRecordAsync(Record record);
         Task<bool> DeleteRecordAsync(int recordId);
