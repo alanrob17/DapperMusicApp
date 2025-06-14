@@ -1,4 +1,5 @@
-﻿using MusicDb.Repositories;
+﻿using MusicDb.Models;
+using MusicDb.Repositories;
 using MusicDb.Services.Output;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,9 @@ namespace MusicDb.Services
 
         public async Task RunAllDatabaseOperations()
         {
-            await GetAllDiscsAsync();
+            // await GetAllDiscsAsync();
             // await GetAllDiscLengthsAsync();
+            await GetDiscAsync(249);
         }
 
         private async Task GetAllDiscsAsync()
@@ -56,6 +58,20 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteLineAsync("No discs found.");
+            }
+        }
+
+        private async Task GetDiscAsync(int discId)
+        {
+            
+            var disc = await _repository.GetDiscByIdAsync(discId); // Assuming GetDiscByIdAsync is implemented in IDiscRepository
+            if (disc != null)
+            {
+                _output.WriteLineAsync($"Disc retrieved successfully: \n{disc.ToString()}");
+            }
+            else
+            {
+                _output.WriteLineAsync("No disc found with the specified ID.");
             }
         }
     }

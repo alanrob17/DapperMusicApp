@@ -211,6 +211,14 @@ namespace MusicDb.Repositories
             return await _db.GetDataAsync<Record>(sproc, parameter);
         }
 
+        public async Task<string> GetAlbumLengthAsync(int recordId)
+        {
+            var sproc = "adm_GetAlbumLength";
+            var parameters = new DynamicParameters();
+            parameters.Add("@RecordId", recordId);
+            return await _db.GetTextAsync(sproc, parameters);
+        }
+
         public async Task<int> AddRecordAsync(Record record)
         {
             return await _db.SaveDataAsync("adm_RecordInsert", record, outputParameterName: "RecordId");

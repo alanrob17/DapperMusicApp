@@ -29,5 +29,12 @@ namespace MusicDb.Repositories
             var sproc = "up_GetAllDiscLengths";
             return await _db.GetDataAsync<ArtistRecordDiscDto>(sproc, new { });
         }
+
+        public async Task<Disc> GetDiscByIdAsync(int discId)
+        {
+            var sproc = "adm_getDisc";
+            var disc = await _db.GetSingleAsync<Disc>(sproc, new { DiscId = discId });
+            return disc ?? throw new KeyNotFoundException($"Disc with ID {discId} not found.");
+        }
     }
 }

@@ -52,7 +52,8 @@ namespace MusicDb.Services
             // await GetRecordDetailsAsync(3232);
             // await GetTotalArtistDiscsAsync();
             // await GetRecordHtmlAsync(3232);
-            await GetRecordListAsync(26);
+            // await GetRecordListAsync(26);
+            await GetAlbumLengthAsync(306);
         }
 
         private async Task GetAllRecordsAsync()
@@ -320,32 +321,6 @@ namespace MusicDb.Services
             }
         }
 
-        private async Task AddNewRecord()
-        {
-            var recordId = await _repository.AddRecordAsync(new Record
-            {
-                ArtistId = 413,
-                Name = "Bass Extroadinaire!",
-                SubTitle = "The Best of James Robson",
-                Field = "Rock",
-                Recorded = 2024,
-                Discs = 2,
-                CoverName = "G:\\Music\\Library\\James Robson\\2024 - Bass Extroadinaire!\\cover.jpg",
-                Review = "This is James' first album.",
-                Folder = "G:\\Music\\Library\\James Robson",
-                Length = "0:1:00:00"
-            });
-
-            if (recordId > 0)
-            {
-                await _output.WriteLineAsync($"Record with Id: {recordId} added successfully");
-            }
-            else
-            {
-                await _output.WriteErrorAsync("Failed to add record!");
-            }
-        }
-
         private async Task GetRecordNumberByYearAsync(int year)
         {
             var records = await _repository.GetRecordNumberByYearAsync(year);
@@ -418,6 +393,45 @@ namespace MusicDb.Services
             foreach (var kvp in recordDictionary)
             {
                 await _output.WriteLineAsync($"{kvp.Key}: {kvp.Value}");
+            }
+        }
+
+        private async Task GetAlbumLengthAsync(int recordId)
+        {
+            string albumLength = await _repository.GetAlbumLengthAsync(recordId);
+            if (albumLength != null)
+            {
+                await _output.WriteLineAsync($"Album length: {albumLength}");
+            }
+            else
+            {
+                await _output.WriteLineAsync("No album length found.");
+            }
+        }
+
+        private async Task AddNewRecord()
+        {
+            var recordId = await _repository.AddRecordAsync(new Record
+            {
+                ArtistId = 413,
+                Name = "Bass Extroadinaire!",
+                SubTitle = "The Best of James Robson",
+                Field = "Rock",
+                Recorded = 2024,
+                Discs = 2,
+                CoverName = "G:\\Music\\Library\\James Robson\\2024 - Bass Extroadinaire!\\cover.jpg",
+                Review = "This is James' first album.",
+                Folder = "G:\\Music\\Library\\James Robson",
+                Length = "0:1:00:00"
+            });
+
+            if (recordId > 0)
+            {
+                await _output.WriteLineAsync($"Record with Id: {recordId} added successfully");
+            }
+            else
+            {
+                await _output.WriteErrorAsync("Failed to add record!");
             }
         }
 
