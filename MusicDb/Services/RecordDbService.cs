@@ -53,9 +53,9 @@ namespace MusicDb.Services
             // await GetTotalArtistDiscsAsync();
             // await GetRecordHtmlAsync(3232);
             // await GetRecordListAsync(26);
-            await GetAlbumLengthAsync(306);
+            // await GetAlbumLengthAsync(306);
+            await GetAlbumDetailsAndLengthAsync(306);
         }
-
         private async Task GetAllRecordsAsync()
         {
             var records = await _repository.GetAllRecordsAsync();
@@ -406,6 +406,19 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteLineAsync("No album length found.");
+            }
+        }
+
+        private async Task GetAlbumDetailsAndLengthAsync(int recordId)
+        {
+            ArtistRecordDto album = await _repository.GetAlbumDetailsAsync(recordId);
+            if (album != null)
+            {
+                await _output.WriteLineAsync($"Album length: {album.ToString()}");
+            }
+            else
+            {
+                await _output.WriteLineAsync("No album found.");
             }
         }
 
