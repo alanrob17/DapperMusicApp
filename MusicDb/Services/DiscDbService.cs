@@ -24,7 +24,8 @@ namespace MusicDb.Services
         {
             // await GetAllDiscsAsync();
             // await GetAllDiscLengthsAsync();
-            await GetDiscAsync(249);
+            // await GetDiscAsync(249);
+            await GetLongDiscsAsync();
         }
 
         private async Task GetAllDiscsAsync()
@@ -67,11 +68,28 @@ namespace MusicDb.Services
             var disc = await _repository.GetDiscByIdAsync(discId); // Assuming GetDiscByIdAsync is implemented in IDiscRepository
             if (disc != null)
             {
-                _output.WriteLineAsync($"Disc retrieved successfully: \n{disc.ToString()}");
+                await _output.WriteLineAsync($"Disc retrieved successfully: \n{disc.ToString()}");
             }
             else
             {
-                _output.WriteLineAsync("No disc found with the specified ID.");
+                await _output.WriteLineAsync("No disc found with the specified ID.");
+            }
+        }
+
+        private async Task GetLongDiscsAsync()
+        {
+            var discs = await _repository.GetLongDiscsAsync();
+            if (discs != null && discs.Any())
+            {
+                await _output.WriteLineAsync("Discs retrieved successfully:");
+                foreach (var disc in discs)
+                {
+                    await _output.WriteLineAsync(disc.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No discs found.");
             }
         }
     }

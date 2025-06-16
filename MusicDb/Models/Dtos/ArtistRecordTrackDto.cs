@@ -17,6 +17,7 @@ namespace MusicDb.Models.Dtos
         public int RecordId { get; set; }
         public string? RecordName { get; set; }
         public int Recorded { get; set; }
+        public int Discs { get; set; }
         public int DiscId { get; set; }
         public string? DiscName { get; set; }
         public int DiscNumber { get; set; }
@@ -24,7 +25,6 @@ namespace MusicDb.Models.Dtos
         public string? Name { get; set; }
         public string Length { get; set; }
         public TimeSpan? Duration { get; set; }
-        public string? Media { get; set; }
         public string? Field { get; set; }
         public int Number { get; set; }
         public string? FullTrackName { get; set; }

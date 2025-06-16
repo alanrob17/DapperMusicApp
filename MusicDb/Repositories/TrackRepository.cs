@@ -59,7 +59,35 @@ namespace MusicDb.Repositories
             var sproc = "adm_CalculateTotalAlbumTime";
             TotalTimeDto? totalTime = await _db.GetSingleAsync<TotalTimeDto>(sproc, new { });
 
-            return totalTime ?? new TotalTimeDto() { }; 
+            return totalTime ?? new TotalTimeDto() { };
+        }
+
+        public Task<IEnumerable<ArtistRecordTrackDto>> GetAllSingleTracksAsync()
+        {
+            var sproc = "adm_GetAlbumsWithOneTrack";
+            return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, new { });
+        }
+
+        public Task<IEnumerable<ArtistRecordTrackDto>> GetArtistGuestTracksAsync(string name)
+        {
+            var sproc = "adm_GetArtistGuestTracks";
+            var parameter = new DynamicParameters();
+            parameter.Add("@ArtistName", name);
+            return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, parameter);
+        }
+
+        public Task<IEnumerable<Track>> GetTrackListingAsync(int discId)
+        {
+            var sproc = "adm_SelectTracksFromDisc";
+            var parameter = new { DiscId = discId };
+            return _db.GetDataAsync<Track>(sproc, parameter);
+        }
+
+        public Task<IEnumerable<ArtistRecordTrackDto>> GetRecordTrackListingAsync(int recordId)
+        {
+            var sproc = "adm_SelectTracksFromRecord";
+            var parameter = new { RecordId = recordId };
+            return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, parameter);
         }
     }
 }

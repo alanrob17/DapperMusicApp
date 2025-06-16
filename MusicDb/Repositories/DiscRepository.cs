@@ -36,5 +36,11 @@ namespace MusicDb.Repositories
             var disc = await _db.GetSingleAsync<Disc>(sproc, new { DiscId = discId });
             return disc ?? throw new KeyNotFoundException($"Disc with ID {discId} not found.");
         }
+
+        public Task<IEnumerable<ArtistRecordDiscDto>> GetLongDiscsAsync()
+        {
+            var sproc = "adm_GetLongDiscs";
+            return _db.GetDataAsync<ArtistRecordDiscDto>(sproc, new { });
+        }
     }
 }

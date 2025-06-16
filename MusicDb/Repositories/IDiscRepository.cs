@@ -13,5 +13,6 @@ namespace MusicDb.Repositories
         Task<IEnumerable<Disc>> GetAllDiscsAsync();
         Task<IEnumerable<ArtistRecordDiscDto>> GetAllDiscLengthsAsync();
         Task<Disc> GetDiscByIdAsync(int discId);
+        Task<IEnumerable<ArtistRecordDiscDto>> GetLongDiscsAsync();
     }
 }

@@ -16,5 +16,9 @@ namespace MusicDb.Repositories
         Task<IEnumerable<ArtistRecordTrackDto>> GetArtistListAsync(int artistId);
         Task<IEnumerable<ArtistRecordTrackDto>> GetArtistRecordAsync(int artistId, int recordId);
         Task<TotalTimeDto> GetTotalAlbumTimeAsync();
+        Task<IEnumerable<ArtistRecordTrackDto>> GetAllSingleTracksAsync();
+        Task<IEnumerable<ArtistRecordTrackDto>> GetArtistGuestTracksAsync(string name);
+        Task<IEnumerable<Track>> GetTrackListingAsync(int discId);
+        Task<IEnumerable<ArtistRecordTrackDto>> GetRecordTrackListingAsync(int recordId);
     }
 }

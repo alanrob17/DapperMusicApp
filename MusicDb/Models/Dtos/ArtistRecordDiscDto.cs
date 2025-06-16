@@ -19,7 +19,6 @@ namespace MusicDb.Models.Dtos
         public string? Field { get; set; }
         public int Recorded { get; set; }
         public int TotalDiscs { get; set; }
-        public string? Media { get; set; }
         public int DiscId { get; set; }
         public string? DiscName { get; set; }
         public int? DiscNumber { get; set; }
