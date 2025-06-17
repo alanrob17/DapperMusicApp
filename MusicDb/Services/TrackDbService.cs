@@ -26,13 +26,15 @@ namespace MusicDb.Services
             // await GetAllTrackRecordsAsync();
             // await GetAllTracksWithTechnicalDetailsAsync();
             // await GetFullListAsync();
+            await GetBriefListAsync();
+            // await GetBriefListByYearAsync(1970);
             // await GetArtistListAsync();
             // await GetArtistRecordAsync();
             // await GetTotalAlbumTimeAsync();
             // await GetAllSingleTrackRecordsAsync();
             // await GetArtistGuestTrackListAsync("Bob Dylan");
             // await GetTrackListingAsync(189);
-            await GetAllTrackRecordsAsync(233);
+            // await GetAllTrackRecordsAsync(233);
         }
 
         private async Task GetAllTrackRecordsAsync()
@@ -219,6 +221,42 @@ namespace MusicDb.Services
                         string disc = track.DiscNumber.ToString().PadLeft(2, '0');
                         await _output.WriteLineAsync($"{track.ArtistName} - {track.Recorded} : Disc {disc} - {track.RecordName} - {number} - {track.FullTrackName} ({track.Duration?.ToString(@"mm\:ss") ?? "N/A"})");
                     }
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No tracks found.");
+            }
+        }
+
+        private async Task GetBriefListAsync()
+        {
+            IEnumerable<Track> tracks = await _repository.GetBriefListAsync();
+            if (tracks != null && tracks.Any())
+            {
+                await _output.WriteLineAsync("Single track records retrieved successfully:");
+                foreach (var track in tracks)
+                {
+                    string number = track.Number.ToString().PadLeft(2, '0');
+                    await _output.WriteLineAsync($"{track.Artist} - {track.Recorded} : {track.Album} - {track.Field} - {number} - {track.Name} ({track.Length?.ToString() ?? "N/A"})");
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No tracks found.");
+            }
+        }
+
+        private async Task GetBriefListByYearAsync(int year)
+        {
+            IEnumerable<Track> tracks = await _repository.GetBriefListByYearAsync(year);
+            if (tracks != null && tracks.Any())
+            {
+                await _output.WriteLineAsync("Single track records retrieved successfully:");
+                foreach (var track in tracks)
+                {
+                    string number = track.Number.ToString().PadLeft(2, '0');
+                    await _output.WriteLineAsync($"{track.Artist} - {track.Recorded} : {track.Album} - {track.Field} - {number} - {track.Name} ({track.Length?.ToString() ?? "N/A"})");
                 }
             }
             else

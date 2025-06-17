@@ -89,5 +89,18 @@ namespace MusicDb.Repositories
             var parameter = new { RecordId = recordId };
             return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, parameter);
         }
+
+        public Task<IEnumerable<Track>> GetBriefListAsync()
+        {
+            var sproc = "adm_TrackSelectBrief";
+            return _db.GetDataAsync<Track>(sproc, new { });
+        }
+
+        public Task<IEnumerable<Track>> GetBriefListByYearAsync(int year)
+        {
+            var sproc = "adm_TrackSelectBriefByYear";
+            var parameter = new { Recorded = year };
+            return _db.GetDataAsync<Track>(sproc, parameter);
+        }
     }
 }
