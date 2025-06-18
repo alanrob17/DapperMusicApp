@@ -226,6 +226,13 @@ namespace MusicDb.Repositories
             return await _db.GetSingleAsync<ArtistRecordDto>(sproc, parameter);
         }
 
+
+        public Task<IEnumerable<ArtistRecordDto>> GetNullRecordFieldAsync()
+        {
+            var sproc = "adm_GetNullRecordField";
+            return _db.GetDataAsync<ArtistRecordDto>(sproc, new { });
+        }
+
         public async Task<int> AddRecordAsync(Record record)
         {
             return await _db.SaveDataAsync("adm_RecordInsert", record, outputParameterName: "RecordId");

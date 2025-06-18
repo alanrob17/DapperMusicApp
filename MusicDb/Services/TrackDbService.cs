@@ -26,7 +26,9 @@ namespace MusicDb.Services
             // await GetAllTrackRecordsAsync();
             // await GetAllTracksWithTechnicalDetailsAsync();
             // await GetFullListAsync();
-            await GetBriefListAsync();
+            // await GetHighQualityTracksAsync();
+            await GetHighQualityAlbumsAsync();
+            // await GetBriefListAsync();
             // await GetBriefListByYearAsync(1970);
             // await GetArtistListAsync();
             // await GetArtistRecordAsync();
@@ -78,6 +80,24 @@ namespace MusicDb.Services
             if (tracks != null && tracks.Any())
             {
                 await _output.WriteLineAsync("Full list of tracks retrieved successfully:");
+
+                foreach (var track in tracks)
+                {
+                    await _output.WriteLineAsync(track.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No tracks found in the full list.");
+            }
+        }
+
+        private async Task GetHighQualityTracksAsync()
+        {
+            IEnumerable<ArtistRecordTrackDto> tracks = await _repository.GetHighQualityTracksAsync();
+            if (tracks != null && tracks.Any())
+            {
+                await _output.WriteLineAsync("High quality tracks retrieved successfully:");
 
                 foreach (var track in tracks)
                 {
@@ -262,6 +282,24 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteLineAsync("No tracks found.");
+            }
+        }
+
+        private async Task GetHighQualityAlbumsAsync()
+        {
+            IEnumerable<ArtistRecordDto> records = await _repository.GetHighQualityAlbumsAsync();
+            if (records != null && records.Any())
+            {
+                await _output.WriteLineAsync("High quality albums retrieved successfully:");
+
+                foreach (var record in records)
+                {
+                    await _output.WriteLineAsync(record.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No high quality Albums found in the list.");
             }
         }
     }

@@ -54,7 +54,8 @@ namespace MusicDb.Services
             // await GetRecordHtmlAsync(3232);
             // await GetRecordListAsync(26);
             // await GetAlbumLengthAsync(306);
-            await GetAlbumDetailsAndLengthAsync(306);
+            // await GetAlbumDetailsAndLengthAsync(306);
+            await GetNullRecordField();
         }
         private async Task GetAllRecordsAsync()
         {
@@ -274,7 +275,7 @@ namespace MusicDb.Services
             {
                 foreach (var record in records)
                 {
-                        await _output.WriteLineAsync(record.ToString());
+                    await _output.WriteLineAsync(record.ToString());
                 }
             }
             else
@@ -419,6 +420,16 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteLineAsync("No album found.");
+            }
+        }
+
+        private async Task GetNullRecordField()
+        {
+            IEnumerable<ArtistRecordDto> records = await _repository.GetNullRecordFieldAsync();
+
+            foreach (var record in records)
+            {
+                 await _output.WriteLineAsync($"RecordId: {record.RecordId} - {record.ToString()}");
             }
         }
 

@@ -102,5 +102,17 @@ namespace MusicDb.Repositories
             var parameter = new { Recorded = year };
             return _db.GetDataAsync<Track>(sproc, parameter);
         }
+
+        public Task<IEnumerable<ArtistRecordTrackDto>> GetHighQualityTracksAsync()
+        {
+            var sproc = "up_ArtistRecordHighQualityTracks";
+            return _db.GetDataAsync<ArtistRecordTrackDto>(sproc, new { });
+        }
+
+        public Task<IEnumerable<ArtistRecordDto>> GetHighQualityAlbumsAsync()
+        {
+            var sproc = "up_ArtistHighQualityAlbums";
+            return _db.GetDataAsync<ArtistRecordDto>(sproc, new { });
+        }
     }
 }

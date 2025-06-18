@@ -37,6 +37,7 @@ namespace MusicDb.Repositories
         Task<IEnumerable<Record>> GetRecordListAsync(int artistId);
         Task<string> GetAlbumLengthAsync(int recordId);
         Task<ArtistRecordDto> GetAlbumDetailsAsync(int recordId);
+        Task<IEnumerable<ArtistRecordDto>> GetNullRecordFieldAsync();
         Task<int> AddRecordAsync(Record record);
         Task<int> UpdateRecordAsync(Record record);
         Task<bool> DeleteRecordAsync(int recordId);
