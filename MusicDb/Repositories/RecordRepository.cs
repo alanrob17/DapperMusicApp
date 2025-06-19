@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using MusicDb.Data;
+using MusicDb.Dtos;
 using MusicDb.Models;
-using MusicDb.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Data;

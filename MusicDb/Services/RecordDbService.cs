@@ -1,5 +1,5 @@
-﻿using MusicDb.Models;
-using MusicDb.Models.Dtos;
+﻿using MusicDb.Dtos;
+using MusicDb.Models;
 using MusicDb.Repositories;
 using MusicDb.Services.Output;
 using System;
@@ -23,6 +23,7 @@ namespace MusicDb.Services
         public async Task RunAllDatabaseOperations()
         {
             // await GetAllRecordsAsync();
+            await GetBasicListAsync();
             // await GetAllArtistRecordsAsync();
             // await GetRecordByIdAsync(1076);
             // await GetArtistRecordByIdAsync(1076);
@@ -55,15 +56,40 @@ namespace MusicDb.Services
             // await GetRecordListAsync(26);
             // await GetAlbumLengthAsync(306);
             // await GetAlbumDetailsAndLengthAsync(306);
-            await GetNullRecordField();
+            // await GetNullRecordField();
         }
+
+        private async Task GetBasicListAsync()
+        {
+            var records = await _repository.GetAllArtistRecordsAsync();
+
+            if (records != null && records.Any())
+            {
+                var name = records.FirstOrDefault()?.ArtistName;
+                await _output.WriteLineAsync("Records retrieved successfully:");
+                foreach (var record in records)
+                {
+                    if (record.ArtistName != name)
+                    {
+                        await _output.WriteLineAsync($"\n");
+                        name = record.ArtistName;
+                    }
+
+                    await _output.WriteLineAsync($"{record.ArtistName}: {record.Recorded} - {record.Name} ({record.Length})");
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No records found.");
+            }
+        }
+
         private async Task GetAllRecordsAsync()
         {
             var records = await _repository.GetAllRecordsAsync();
 
             if (records != null && records.Any())
             {
-                await _output.WriteLineAsync("Records retrieved successfully:");
                 foreach (var record in records)
                 {
                     await _output.WriteLineAsync($"{record.ToString()}");

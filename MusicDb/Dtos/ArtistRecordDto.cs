@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicDb.Models.Dtos
+namespace MusicDb.Dtos
 {
     public class ArtistRecordDto
     {

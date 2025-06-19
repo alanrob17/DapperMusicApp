@@ -1,5 +1,5 @@
-﻿using MusicDb.Models;
-using MusicDb.Models.Dtos;
+﻿using MusicDb.Dtos;
+using MusicDb.Models;
 using MusicDb.Repositories;
 using MusicDb.Services.Output;
 using System;
