@@ -33,14 +33,18 @@ namespace MusicDb
                         config.SetBasePath(Directory.GetCurrentDirectory());
                         config.AddJsonFile("appsettings.json", optional: false);
 
-                        // Optional: Add environment-specific config
                         var env = hostingContext.HostingEnvironment;
                         config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+                        if (env.IsDevelopment())
+                        {
+                            config.AddUserSecrets<Program>();
+                        }
+
+                        config.AddEnvironmentVariables();
                     })
                     .ConfigureServices((context, services) =>
                     {
-                        // Add configuration to DI container
-                        services.AddSingleton<IConfiguration>(context.Configuration);
                         services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
                         services.AddScoped<IDbConnection>(sp =>
                             sp.GetRequiredService<IDbConnectionFactory>().CreateConnection());
@@ -59,13 +63,16 @@ namespace MusicDb
 
                         services.AddSingleton<IOutputService, ConsoleOutputService>();
                     })
-                    .UseSerilog() // This will use the logger we configured above
+                    .UseSerilog()
                     .Build();
 
-                // await host.Services.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
-                await host.Services.GetRequiredService<RecordDbService>().RunAllDatabaseOperations();
-                // await host.Services.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
-                // await host.Services.GetRequiredService<TrackDbService>().RunAllDatabaseOperations();
+                using (var scope = host.Services.CreateScope())
+                {
+                    // await scope.ServiceProvider.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
+                    await scope.ServiceProvider.GetRequiredService<RecordDbService>().RunAllDatabaseOperations();
+                    // await scope.ServiceProvider.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
+                    // await scope.ServiceProvider.GetRequiredService<TrackDbService>().RunAllDatabaseOperations();
+                }
 
                 Log.Information("All database operations completed successfully");
             }

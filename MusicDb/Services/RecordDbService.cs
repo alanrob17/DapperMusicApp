@@ -22,8 +22,8 @@ namespace MusicDb.Services
         }
         public async Task RunAllDatabaseOperations()
         {
-            // await GetAllRecordsAsync();
-            await GetBasicListAsync();
+            await GetAllRecordsAsync();
+            // await GetBasicListAsync();
             // await GetAllArtistRecordsAsync();
             // await GetRecordByIdAsync(1076);
             // await GetArtistRecordByIdAsync(1076);
