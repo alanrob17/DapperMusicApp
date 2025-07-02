@@ -1,4 +1,5 @@
-﻿using MusicDb.Models;
+﻿using MusicDb.Dtos;
+using MusicDb.Models;
 using MusicDb.Repositories;
 using MusicDb.Services.Output;
 using System;
@@ -23,9 +24,10 @@ namespace MusicDb.Services
         public async Task RunAllDatabaseOperations()
         {
             // await GetAllDiscsAsync();
-            await GetAllDiscLengthsAsync();
+            // await GetAllDiscLengthsAsync();
             // await GetDiscAsync(249);
             // await GetLongDiscsAsync();
+            await GetDiscsWithSingleTrackAsync();
         }
 
         private async Task GetAllDiscsAsync()
@@ -90,6 +92,23 @@ namespace MusicDb.Services
             else
             {
                 await _output.WriteLineAsync("No discs found.");
+            }
+        }
+
+        private async Task GetDiscsWithSingleTrackAsync()
+        {
+            var discs = await _repository.GetSingleTrackDiscsAsync();
+            if (discs != null && discs.Any())
+            {
+                await _output.WriteLineAsync("Discs with a single track retrieved successfully:");
+                foreach (var disc in discs)
+                {
+                    await _output.WriteLineAsync(disc.ToString());
+                }
+            }
+            else
+            {
+                await _output.WriteLineAsync("No discs with a single track found.");
             }
         }
     }

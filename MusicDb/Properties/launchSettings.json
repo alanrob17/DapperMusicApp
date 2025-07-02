@@ -1,4 +1,19 @@
 {
+  "profiles": {
+    "MusicDb": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "distributionName": ""
+    }
+  },
   "exclude": [
     "**/bin",
     "**/bower_components",
@@ -6,13 +21,5 @@
     "**/node_modules",
     "**/obj",
     "**/platforms"
-  ],
-  "profiles": {
-    "MusicDb": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
-      }
-    }
-  }
+  ]
 }

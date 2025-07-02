@@ -42,5 +42,11 @@ namespace MusicDb.Repositories
             var sproc = "adm_GetLongDiscs";
             return _db.GetDataAsync<ArtistRecordDiscDto>(sproc, new { });
         }
+
+        public Task<IEnumerable<ArtistRecordDiscDto>> GetSingleTrackDiscsAsync()
+        {
+            var sproc = "adm_GetDiscsWithOneTrack";
+            return _db.GetDataAsync<ArtistRecordDiscDto>(sproc, new { });
+        }
     }
 }
