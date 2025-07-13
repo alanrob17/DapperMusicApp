@@ -69,8 +69,8 @@ namespace MusicDb
                 using (var scope = host.Services.CreateScope())
                 {
                     // await scope.ServiceProvider.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
-                    // await scope.ServiceProvider.GetRequiredService<RecordDbService>().RunAllDatabaseOperations();
-                    await scope.ServiceProvider.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
+                    await scope.ServiceProvider.GetRequiredService<RecordDbService>().RunAllDatabaseOperations();
+                    // await scope.ServiceProvider.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
                     // await scope.ServiceProvider.GetRequiredService<TrackDbService>().RunAllDatabaseOperations();
                 }
 

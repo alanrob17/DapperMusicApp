@@ -22,7 +22,7 @@ namespace MusicDb.Services
         }
         public async Task RunAllDatabaseOperations()
         {
-            await GetAllRecordsAsync();
+            // await GetAllRecordsAsync();
             // await GetBasicListAsync();
             // await GetAllArtistRecordsAsync();
             // await GetRecordByIdAsync(1076);
@@ -57,6 +57,7 @@ namespace MusicDb.Services
             // await GetAlbumLengthAsync(306);
             // await GetAlbumDetailsAndLengthAsync(306);
             // await GetNullRecordField();
+            await GetAllRecordFoldersAsync();
         }
 
         private async Task GetBasicListAsync()
@@ -459,6 +460,21 @@ namespace MusicDb.Services
             }
         }
 
+        private async Task GetAllRecordFoldersAsync()
+        {
+            IEnumerable<Record> records = await _repository.GetAllRecordFoldersAsync();
+
+            foreach (var record in records)
+            {
+                var artist = string.Empty;
+                if (!string.IsNullOrWhiteSpace(record.Folder))
+                {
+                    artist = ExtractArtistFromPath(record.Folder);
+                }
+                await _output.WriteLineAsync($"ArtistId: {record.ArtistId}: {artist} - {record.Folder}");
+            }
+        }
+
         private async Task AddNewRecord()
         {
             var recordId = await _repository.AddRecordAsync(new Record
@@ -578,6 +594,23 @@ namespace MusicDb.Services
             {
                 await _output.WriteErrorAsync($"Failed to delete record with ID {recordId}.");
             }
+        }
+
+        private static string ExtractArtistFromPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Path cannot be null or empty", nameof(path));
+            }
+
+            string[] parts = path.Split('\\');
+
+            if (parts.Length < 4)
+            {
+                throw new FormatException($"Path does not contain enough segments. Expected format: G:\\Music\\Library\\ArtistName\\...");
+            }
+
+            return parts[3];
         }
 
         private string RecordHtml(ArtistRecordDto record)
