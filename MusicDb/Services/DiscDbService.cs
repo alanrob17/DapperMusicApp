@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MusicDb.Services
 {
-    public class DiscDbService
+    public class DiscDbService : IDiscDbService
     {
         private readonly IDiscRepository _repository;
         private readonly IOutputService _output;
@@ -23,11 +23,11 @@ namespace MusicDb.Services
 
         public async Task RunAllDatabaseOperations()
         {
-            // await GetAllDiscsAsync();
+            await GetAllDiscsAsync();
             // await GetAllDiscLengthsAsync();
             // await GetDiscAsync(249);
             // await GetLongDiscsAsync();
-            await GetDiscsWithSingleTrackAsync();
+            // await GetDiscsWithSingleTrackAsync();
         }
 
         private async Task GetAllDiscsAsync()

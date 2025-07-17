@@ -56,10 +56,10 @@ namespace MusicDb
                         services.AddScoped<IDiscRepository, DiscRepository>();
                         services.AddScoped<ITrackRepository, TrackRepository>();
 
-                        services.AddScoped<ArtistDbService>();
-                        services.AddScoped<RecordDbService>();
-                        services.AddScoped<DiscDbService>();
-                        services.AddScoped<TrackDbService>();
+                        services.AddScoped<IArtistDbService, ArtistDbService>();
+                        services.AddScoped<IRecordDbService, RecordDbService>();
+                        services.AddScoped<IDiscDbService, DiscDbService>();
+                        services.AddScoped<ITrackDbService, TrackDbService>();
 
                         services.AddSingleton<IOutputService, ConsoleOutputService>();
                     })
@@ -68,10 +68,10 @@ namespace MusicDb
 
                 using (var scope = host.Services.CreateScope())
                 {
-                    // await scope.ServiceProvider.GetRequiredService<ArtistDbService>().RunAllDatabaseOperations();
-                    await scope.ServiceProvider.GetRequiredService<RecordDbService>().RunAllDatabaseOperations();
-                    // await scope.ServiceProvider.GetRequiredService<DiscDbService>().RunAllDatabaseOperations();
-                    // await scope.ServiceProvider.GetRequiredService<TrackDbService>().RunAllDatabaseOperations();
+                    // await scope.ServiceProvider.GetRequiredService<IArtistDbService>().RunAllDatabaseOperations();
+                    await scope.ServiceProvider.GetRequiredService<IRecordDbService>().RunAllDatabaseOperations();
+                    // await scope.ServiceProvider.GetRequiredService<IDiscDbService>().RunAllDatabaseOperations();
+                    // await scope.ServiceProvider.GetRequiredService<ITrackDbService>().RunAllDatabaseOperations();
                 }
 
                 Log.Information("All database operations completed successfully");

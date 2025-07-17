@@ -11,7 +11,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusicDb.Services
 {
-    public class TrackDbService
+    public class TrackDbService : ITrackDbService
     {
         private readonly ITrackRepository _repository;
         private readonly IOutputService _output;
@@ -25,9 +25,9 @@ namespace MusicDb.Services
         {
             // await GetAllTrackRecordsAsync();
             // await GetAllTracksWithTechnicalDetailsAsync();
-            // await GetFullListAsync();
+            await GetFullListAsync();
             // await GetHighQualityTracksAsync();
-            await GetHighQualityAlbumsAsync();
+            // await GetHighQualityAlbumsAsync();
             // await GetBriefListAsync();
             // await GetBriefListByYearAsync(1970);
             // await GetArtistListAsync();

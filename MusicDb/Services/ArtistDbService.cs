@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MusicDb.Services
 {
-    public class ArtistDbService
+    public class ArtistDbService : IArtistDbService
     {
         private readonly IArtistRepository _repository;
         private readonly IOutputService _output;
@@ -22,7 +22,7 @@ namespace MusicDb.Services
 
         public async Task RunAllDatabaseOperations()
         {
-            // await GetAllArtistsAsync();
+            await GetAllArtistsAsync();
             // await GetAllArtistsWithBriefBioAsync();
             // await GetArtistListAsync();
             // await DisplayAllArtistsAsync();
@@ -46,7 +46,7 @@ namespace MusicDb.Services
             // await GetBiographyFromRecordIdAsync(123);
             // await GetArtistNameFromRecordIdAsync(123);
             // await ShowArtistAsync(26);
-            await GetArtistNameAsync(26);
+            // await GetArtistNameAsync(26);
         }
 
         private async Task AddArtistWithoutFirstNameAsync()

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MusicDb.Services
 {
-    public class RecordDbService
+    public class RecordDbService : IRecordDbService
     {
         private readonly IRecordRepository _repository;
         private readonly IOutputService _output;
@@ -23,7 +23,7 @@ namespace MusicDb.Services
         public async Task RunAllDatabaseOperations()
         {
             // await GetAllRecordsAsync();
-            // await GetBasicListAsync();
+            await GetBasicListAsync();
             // await GetAllArtistRecordsAsync();
             // await GetRecordByIdAsync(1076);
             // await GetArtistRecordByIdAsync(1076);
@@ -57,7 +57,7 @@ namespace MusicDb.Services
             // await GetAlbumLengthAsync(306);
             // await GetAlbumDetailsAndLengthAsync(306);
             // await GetNullRecordField();
-            await GetAllRecordFoldersAsync();
+            // await GetAllRecordFoldersAsync();
         }
 
         private async Task GetBasicListAsync()
